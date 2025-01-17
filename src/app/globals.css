@@ -12,3 +12,60 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@media (max-width: 768px) {
+  .my-react-pdf {
+    padding: 0.5rem;
+  }
+
+  .my-react-pdf button {
+    padding: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .my-react-pdf p {
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .my-react-pdf {
+    padding: 0.25rem;
+  }
+
+  .my-react-pdf button {
+    font-size: 0.75rem;
+  }
+
+  .my-react-pdf p {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-height: 800px) {
+  .my-react-pdf {
+    padding: 0.25rem;
+  }
+
+  .my-react-pdf button {
+    font-size: 0.75rem;
+  }
+
+  .my-react-pdf p {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-height: 600px) {
+  .my-react-pdf {
+    padding: 0.125rem;
+  }
+
+  .my-react-pdf button {
+    font-size: 0.625rem;
+  }
+
+  .my-react-pdf p {
+    font-size: 0.625rem;
+  }
+}

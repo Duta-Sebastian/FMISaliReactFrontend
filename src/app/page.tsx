@@ -1,10 +1,10 @@
-import PdfReactPdf from "@/components/PDFViewer";
+import React from "react";
+import TimetableButtons from "@/components/TimetableButtons";
 
 export default function Home() {
-  const fileId = 1;
-  return (
-      <div suppressHydrationWarning={true}>
-        <PdfReactPdf fileId={fileId} getTitle={true} />
-      </div>
-  );
+    return (
+        <div suppressHydrationWarning={true}>
+            <TimetableButtons />
+        </div>
+    );
 }
