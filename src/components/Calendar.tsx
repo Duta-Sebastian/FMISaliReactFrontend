@@ -5,6 +5,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import AutocompleteSelect from "./AutocompleteSelect";
 import useFetchRooms from "@/hooks/useFetchRooms";
+import FilterMenu from "@/components/FilterRoomsMenu";
 
 interface Event {
     title: string;
@@ -82,13 +83,16 @@ const CalendarWithRoom: React.FC = () => {
             {/* AutocompleteSelect for rooms */}
             <div className="absolute top-0 left-0 w-full z-10 pt-2">
                 {rooms.length > 0 && (
-                    <AutocompleteSelect
-                        options={rooms.map((room) => ({
-                            label: room.label,
-                            value: room.value,
-                        }))}
-                        onChange={handleRoomChange}
-                    />
+                    <div className="flex items-center space-x-4">
+                        <AutocompleteSelect
+                            options={rooms.map((room) => ({
+                                label: room.label,
+                                value: room.value,
+                            }))}
+                            onChange={handleRoomChange}
+                        />
+                        <FilterMenu/>
+                    </div>
                 )}
             </div>
 

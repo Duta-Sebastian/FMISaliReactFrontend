@@ -8,7 +8,7 @@ interface AutocompleteSelectProps {
 
 const AutocompleteSelect: React.FC<AutocompleteSelectProps> = ({ options, onChange }) => {
     const [inputValue, setInputValue] = useState<string>('');
-    const [width, setWidth] = useState<number | undefined>(undefined);
+    const [width, setWidth] = useState<number | undefined>(300);
     const [isReady, setIsReady] = useState<boolean>(false);
 
     const handleInputChange = (newValue: string) => {
@@ -22,27 +22,29 @@ const AutocompleteSelect: React.FC<AutocompleteSelectProps> = ({ options, onChan
 
     useEffect(() => {
         setIsReady(false);
-        const longestLabel = options.reduce((longest, option) =>
-            option.label.length > longest.length ? option.label : longest, ''
-        );
 
         const tempDiv = document.createElement('div');
         tempDiv.style.visibility = 'hidden';
         tempDiv.style.position = 'absolute';
         tempDiv.style.whiteSpace = 'nowrap';
-        tempDiv.textContent = longestLabel;
+        tempDiv.style.fontStyle = '16px';
         document.body.appendChild(tempDiv);
-        console.log(tempDiv.clientWidth)
 
-        setWidth(tempDiv.clientWidth + 120);
-
+        let maxWidth = 0;
+        options.forEach((options) => {
+            tempDiv.textContent = options.label;
+            maxWidth = Math.max(maxWidth, tempDiv.offsetWidth);
+        })
         document.body.removeChild(tempDiv);
+
+        setWidth(Math.min(Math.max(maxWidth + 50, 300), 600));
+
         setIsReady(true);
     }, [options]);
 
     return (
         <div className="flex justify-center items-center pb-4 z-1000 w-full">
-            <div style={{ width: width ? `${width}px` : '100%' }}>
+            <div>
                 {isReady ? (
                 <Select
                     inputValue={inputValue}
@@ -57,9 +59,9 @@ const AutocompleteSelect: React.FC<AutocompleteSelectProps> = ({ options, onChan
                     styles={{
                         "control": (base) => ({
                             ...base,
-                            width: '100%',
-                            padding: '8px',
-                            borderRadius: '8px',
+                            width: `${width}px`,
+                            padding: '4px 8px',
+                            borderRadius: '6px',
                             borderColor: '#D1D5DB',
                             '&:hover': {
                                 borderColor: '#3B82F6',
@@ -69,16 +71,18 @@ const AutocompleteSelect: React.FC<AutocompleteSelectProps> = ({ options, onChan
                             color: 'var(--select-text-light)',
                             paddingLeft: '12px',
                             paddingRight: '12px',
+                            justifyContent: 'center',
                         }),
                         "option": (base, state) => ({
                             ...base,
                             backgroundColor: state.isSelected ? '#3B82F6' : state.isFocused ? '#E0F2FE' : 'white',
                             color: state.isSelected ? 'white' : 'black',
-                            padding: '6px 12px',
+                            padding: '10px',
                             borderRadius: '4px',
                             '&:active': {
                                 backgroundColor: '#2563EB',
                             },
+                            justifyContent: `center`,
                         }),
                         "placeholder": (base) => ({
                             ...base,
@@ -87,7 +91,7 @@ const AutocompleteSelect: React.FC<AutocompleteSelectProps> = ({ options, onChan
                             textAlign: 'center',
                         }),
                     }}
-                />) : <div style={{}}/> }
+                />) : null}
             </div>
         </div>
     );

@@ -7,7 +7,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
     import.meta.url,
 ).toString();
 
-export const usePdfTitles = (pdfUrl: string | null) => {
+const usePdfTitles = (pdfUrl: string | null) => {
     const [titles, setTitles] = useState<Map<number, string>>(new Map());
 
     useEffect(() => {
@@ -37,3 +37,5 @@ export const usePdfTitles = (pdfUrl: string | null) => {
 
     return titles;
 };
+
+export default usePdfTitles;

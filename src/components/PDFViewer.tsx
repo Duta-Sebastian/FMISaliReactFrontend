@@ -3,7 +3,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Document, Page} from 'react-pdf';
 import {useFetchPDF} from '@/hooks/useFetchPDF';
-import {usePdfTitles} from '@/hooks/useTitlesPDF';
+import usePdfTitles from '@/hooks/useTitlesPDF';
 import AutocompleteSelect from "@/components/AutocompleteSelect";
 import {useSwipeable} from 'react-swipeable';
 
