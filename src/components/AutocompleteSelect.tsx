@@ -37,8 +37,8 @@ const AutocompleteSelect: React.FC<AutocompleteSelectProps> = ({ options, onChan
     }, [options]);
 
     return (
-        <div className="flex justify-center items-center pb-4 z-1000">
-            <div style={{ width: width ? `${width}px` : 'auto' }}>
+        <div className="flex justify-center items-center pb-4 z-1000 w-full">
+            <div style={{ width: width ? `${width}px` : '100%' }}>
                 <Select
                     inputValue={inputValue}
                     onInputChange={handleInputChange}
@@ -50,7 +50,7 @@ const AutocompleteSelect: React.FC<AutocompleteSelectProps> = ({ options, onChan
                     className="react-select-container"
                     classNamePrefix="react-select"
                     styles={{
-                        control: (base) => ({
+                        "control": (base) => ({
                             ...base,
                             width: '100%',
                             padding: '8px',
@@ -65,7 +65,7 @@ const AutocompleteSelect: React.FC<AutocompleteSelectProps> = ({ options, onChan
                             paddingLeft: '12px',
                             paddingRight: '12px',
                         }),
-                        option: (base, state) => ({
+                        "option": (base, state) => ({
                             ...base,
                             backgroundColor: state.isSelected ? '#3B82F6' : state.isFocused ? '#E0F2FE' : 'white',
                             color: state.isSelected ? 'white' : 'black',
@@ -75,7 +75,7 @@ const AutocompleteSelect: React.FC<AutocompleteSelectProps> = ({ options, onChan
                                 backgroundColor: '#2563EB',
                             },
                         }),
-                        placeholder: (base) => ({
+                        "placeholder": (base) => ({
                             ...base,
                             color: '#9CA3AF',
                             fontStyle: 'italic',

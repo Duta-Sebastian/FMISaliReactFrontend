@@ -22,17 +22,15 @@ export default function TimetableButtons() {
 
     return (
         <div className="h-screen overflow-hidden">
-            <div className="flex justify-center items-center space-x-4 mt-6 pb-2">
+            <div className="flex flex-wrap justify-center items-center gap-4 mt-6 pb-2">
                 <button
-                    className="px-6 py-3 bg-blue-600 text-white font-medium text-lg
-                     rounded-lg shadow-md hover:bg-blue-700 transition-colors"
+                    className="px-6 py-3 bg-blue-600 text-white font-medium text-lg rounded-lg shadow-md hover:bg-blue-700 transition-colors"
                     onClick={() => selectTimetable("students")}
                 >
                     Orar Studenți
                 </button>
                 <button
-                    className="px-6 py-3 bg-green-600 text-white font-medium text-lg
-                     rounded-lg shadow-md hover:bg-green-700 transition-colors"
+                    className="px-6 py-3 bg-green-600 text-white font-medium text-lg rounded-lg shadow-md hover:bg-green-700 transition-colors"
                     onClick={() => selectTimetable("professors")}
                 >
                     Orar Profesori

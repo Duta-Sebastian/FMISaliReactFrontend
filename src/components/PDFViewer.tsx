@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Document, Page } from 'react-pdf';
 import { useFetchPDF } from '@/hooks/useFetchPDF';
 import { usePdfTitles } from '@/hooks/useTitlesPDF';
@@ -19,8 +19,12 @@ export default function PdfReactPdf({ fileId, getTitle }: PdfProps) {
     const [numPages, setNumPages] = useState<number | null>(null);
     const [pageNumber, setPageNumber] = useState<number>(1);
     const [pageWidth, setPageWidth] = useState<number>(900);
+    const [pageHeight, setPageHeight] = useState<number>(500);
+    const [isAutocompleteRendered, setIsAutocompleteRendered] = useState(false);
+    const [isResized, setIsResized] = useState(false);
     const pdfUrl = useFetchPDF(fileId);
     const titles = usePdfTitles(pdfUrl);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
         setNumPages(numPages);
@@ -51,79 +55,99 @@ export default function PdfReactPdf({ fileId, getTitle }: PdfProps) {
     });
 
     useEffect(() => {
-        const handleResize = () => {
-            const containerWidth = Math.min(window.innerWidth * 0.9, 900);
-            setPageWidth(containerWidth);
-        };
+        const resizeObserver = new ResizeObserver(() => {
+            if (containerRef.current) {
+                const containerWidth = containerRef.current.offsetWidth;
+                const containerHeight = containerRef.current.offsetHeight;
 
-        handleResize();
-        window.addEventListener('resize', handleResize);
+                setPageWidth(Math.min(containerWidth * 0.9, 900));
+
+                setPageHeight(Math.min(containerHeight * 0.8, 600));
+
+                setIsResized(true);
+            }
+        });
+
+        if (containerRef.current) {
+            resizeObserver.observe(containerRef.current);
+        }
 
         return () => {
-            window.removeEventListener('resize', handleResize);
+            if (containerRef.current) {
+                resizeObserver.unobserve(containerRef.current);
+            }
         };
     }, []);
 
-    if (!pdfUrl) {
-        return <div>Loading PDF...</div>;
-    }
+    useEffect(() => {
+        if (getTitle) {
+            setIsAutocompleteRendered(true);
+        }
+    }, [getTitle]);
 
     return (
         <div
             {...swipeHandlers}
-            className="relative flex flex-col justify-center items-center h-screen w-full
-             bg-background-light dark:bg-background-dark p-4 overflow-hidden"
+            className="relative flex flex-col justify-center items-center h-full w-full bg-background-light dark:bg-background-dark p-4 overflow-hidden"
+            ref={containerRef}
         >
-            <div className="absolute top-0 left-0 w-full z-10 pt-2">
-                {getTitle && titles.size > 0 && (
-                    <AutocompleteSelect
-                        key={fileId}
-                        options={Array.from(titles.entries()).map(([key, value]) => ({
-                            label: value,
-                            value: key,
-                        }))}
-                        onChange={goToPage}
-                    />
-                )}
+            {(getTitle && isAutocompleteRendered && isResized) || !getTitle ? (
+                <>
+                    <div className="absolute top-0 left-0 w-full z-10 pt-2">
+                        {getTitle && titles.size > 0 && (
+                            <AutocompleteSelect
+                                key={fileId}
+                                options={Array.from(titles.entries()).map(([key, value]) => ({
+                                    label: value,
+                                    value: key,
+                                }))}
+                                onChange={goToPage}
+                            />
+                        )}
 
-                <div className="flex justify-center mb-4 space-x-4">
-                    <button
-                        onClick={prevPage}
-                        className="p-2 bg-primary text-button-text rounded-lg border
-                         border-button-border-color dark:bg-primary-dark dark:border-button-border-color
-                          dark:text-button-text hover:bg-primary-hover dark:hover:bg-primary-dark-hover"
-                    >
-                        Previous
-                    </button>
-                    <button
-                        onClick={nextPage}
-                        className="p-2 bg-primary text-button-text rounded-lg border
-                         border-button-border-color dark:bg-primary-dark dark:border-button-border-color
-                          dark:text-button-text hover:bg-primary-hover dark:hover:bg-primary-dark-hover"
-                    >
-                        Next
-                    </button>
-                </div>
-            </div>
+                        <div className="flex justify-center mb-4 space-x-4">
+                            <button
+                                onClick={prevPage}
+                                className="p-2 bg-primary text-button-text rounded-lg border
+                                 border-button-border-color dark:bg-primary-dark dark:border-button-border-color
+                                  dark:text-button-text hover:bg-primary-hover dark:hover:bg-primary-dark-hover"
+                            >
+                                Previous
+                            </button>
+                            <button
+                                onClick={nextPage}
+                                className="p-2 bg-primary text-button-text rounded-lg border
+                                 border-button-border-color dark:bg-primary-dark dark:border-button-border-color
+                                  dark:text-button-text hover:bg-primary-hover dark:hover:bg-primary-dark-hover"
+                            >
+                                Next
+                            </button>
+                        </div>
+                    </div>
 
-            <div
-                className="my-react-pdf flex justify-center items-center w-full max-w-7xl"
-                style={{ position: 'relative', zIndex: 1, pointerEvents: 'auto' }}
-            >
-                <Document key={fileId} file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess} >
-                    <Page
-                        pageNumber={pageNumber}
-                        width={pageWidth}
-                        renderAnnotationLayer={true}
-                        renderTextLayer={true}
-                    />
-                </Document>
-            </div>
-            <div className="flex justify-center items-center mt-4">
-                <p className="text-text-light dark:text-text-dark text-sm sm:text-lg font-medium">
-                    Page {pageNumber} of {numPages}
-                </p>
-            </div>
+                    <div
+                        className="my-react-pdf flex justify-center items-center w-full"
+                        style={{ zIndex: 1, pointerEvents: 'auto' }}
+                    >
+                        <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess}>
+                            <Page
+                                pageNumber={pageNumber}
+                                width={pageWidth}
+                                height={pageHeight}
+                                renderAnnotationLayer={true}
+                                renderTextLayer={true}
+                            />
+                        </Document>
+                    </div>
+                    <div className="flex justify-center items-center mt-4">
+                        <p className="text-text-light dark:text-text-dark text-sm sm:text-lg font-medium">
+                            Page {pageNumber} of {numPages}
+                        </p>
+                    </div>
+                </>
+            ) : (
+                <div>Loading PDF...</div>
+            )}
         </div>
     );
 }
