@@ -1,10 +1,10 @@
 import React from "react";
-import TimetableButtons from "@/components/TimetableButtons";
+import PDFTimetableButtons from "@/components/PDFTimetableButtons";
 
 export default function Home() {
     return (
         <div suppressHydrationWarning={true}>
-            <TimetableButtons />
+            <PDFTimetableButtons />
         </div>
     );
 }

@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fullcalendar/react": "^6.1.15",
+    "fs": "^0.0.1-security",
+    "fullcalendar": "^6.1.15",
     "next": "15.1.4",
     "pdfjs-dist": "^4.8.69",
     "flowbite-react": "^0.10.2",

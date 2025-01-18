@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from 'react';
-import { Document, Page } from 'react-pdf';
-import { useFetchPDF } from '@/hooks/useFetchPDF';
-import { usePdfTitles } from '@/hooks/useTitlesPDF';
+import React, {useEffect, useRef, useState} from 'react';
+import {Document, Page} from 'react-pdf';
+import {useFetchPDF} from '@/hooks/useFetchPDF';
+import {usePdfTitles} from '@/hooks/useTitlesPDF';
 import AutocompleteSelect from "@/components/AutocompleteSelect";
-import { useSwipeable } from 'react-swipeable';
+import {useSwipeable} from 'react-swipeable';
 
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
@@ -15,7 +15,7 @@ interface PdfProps {
     getTitle: boolean;
 }
 
-export default function PdfReactPdf({ fileId, getTitle }: PdfProps) {
+export default function PdfViewer({ fileId, getTitle }: PdfProps) {
     const [numPages, setNumPages] = useState<number | null>(null);
     const [pageNumber, setPageNumber] = useState<number>(1);
     const [pageWidth, setPageWidth] = useState<number>(900);
@@ -73,8 +73,9 @@ export default function PdfReactPdf({ fileId, getTitle }: PdfProps) {
         }
 
         return () => {
-            if (containerRef.current) {
-                resizeObserver.unobserve(containerRef.current);
+            const {current} = containerRef;
+            if (current) {
+                resizeObserver.unobserve(current);
             }
         };
     }, []);
@@ -88,7 +89,8 @@ export default function PdfReactPdf({ fileId, getTitle }: PdfProps) {
     return (
         <div
             {...swipeHandlers}
-            className="relative flex flex-col justify-center items-center h-full w-full bg-background-light dark:bg-background-dark p-4 overflow-hidden"
+            className="relative flex flex-col justify-center items-center h-full
+             w-full bg-background-light dark:bg-background-dark p-4 overflow-hidden"
             ref={containerRef}
         >
             {(getTitle && isAutocompleteRendered && isResized) || !getTitle ? (

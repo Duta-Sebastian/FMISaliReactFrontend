@@ -9,6 +9,7 @@ interface AutocompleteSelectProps {
 const AutocompleteSelect: React.FC<AutocompleteSelectProps> = ({ options, onChange }) => {
     const [inputValue, setInputValue] = useState<string>('');
     const [width, setWidth] = useState<number | undefined>(undefined);
+    const [isReady, setIsReady] = useState<boolean>(false);
 
     const handleInputChange = (newValue: string) => {
         setInputValue(newValue);
@@ -20,6 +21,7 @@ const AutocompleteSelect: React.FC<AutocompleteSelectProps> = ({ options, onChan
     );
 
     useEffect(() => {
+        setIsReady(false);
         const longestLabel = options.reduce((longest, option) =>
             option.label.length > longest.length ? option.label : longest, ''
         );
@@ -30,15 +32,18 @@ const AutocompleteSelect: React.FC<AutocompleteSelectProps> = ({ options, onChan
         tempDiv.style.whiteSpace = 'nowrap';
         tempDiv.textContent = longestLabel;
         document.body.appendChild(tempDiv);
+        console.log(tempDiv.clientWidth)
 
-        setWidth(tempDiv.clientWidth + 40);
+        setWidth(tempDiv.clientWidth + 120);
 
         document.body.removeChild(tempDiv);
+        setIsReady(true);
     }, [options]);
 
     return (
         <div className="flex justify-center items-center pb-4 z-1000 w-full">
             <div style={{ width: width ? `${width}px` : '100%' }}>
+                {isReady ? (
                 <Select
                     inputValue={inputValue}
                     onInputChange={handleInputChange}
@@ -82,7 +87,7 @@ const AutocompleteSelect: React.FC<AutocompleteSelectProps> = ({ options, onChan
                             textAlign: 'center',
                         }),
                     }}
-                />
+                />) : <div style={{}}/> }
             </div>
         </div>
     );
