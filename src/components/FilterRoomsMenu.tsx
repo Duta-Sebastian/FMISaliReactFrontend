@@ -1,4 +1,3 @@
-"use client";
 import React, { useState, useEffect } from 'react';
 import useFetchMinMaxCapacity from "@/hooks/useFetchMinMaxCapacity";
 
@@ -20,7 +19,7 @@ const useSelectOptions = () => {
 const FilterMenu: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOptions, setSelectedOptions] = useState<Set<string>>(new Set());
-    const {minCapacity, maxCapacity} = useFetchMinMaxCapacity();
+    const { minCapacity, maxCapacity } = useFetchMinMaxCapacity();
     const [sliderValue, setSliderValue] = useState<number>(50);
     const [numberValue, setNumberValue] = useState<number>(50);
     const options = useSelectOptions();
@@ -48,20 +47,27 @@ const FilterMenu: React.FC = () => {
     };
 
     useEffect(() => {
-        if ( minCapacity !== null) {
+        if (minCapacity !== null) {
             setSliderValue(minCapacity);
         }
     }, [minCapacity, maxCapacity]);
 
     return (
-        <div>
-            <button onClick={handleToggle}>
-                {isOpen ? 'Close' : 'Open'} Menu
+        <div className="relative">
+            <button
+                onClick={handleToggle}
+                className="p-2 bg-primary text-white rounded-lg focus:outline-none"
+            >
+                <div className="w-6 h-6 flex flex-col justify-between items-center">
+                    <span className="block w-6 h-1 bg-white"></span>
+                    <span className="block w-6 h-1 bg-white"></span>
+                    <span className="block w-6 h-1 bg-white"></span>
+                </div>
             </button>
 
             {isOpen && (
-                <div>
-                    <div>
+                <div className="absolute left-0 mt-2 w-fit bg-white shadow-lg rounded-md z-20">
+                    <div className="pl-1 pr-1">
                         <p>Select Options:</p>
                         {options.map((option, index) => (
                             <div key={index}>
@@ -70,6 +76,7 @@ const FilterMenu: React.FC = () => {
                                         type="checkbox"
                                         checked={selectedOptions.has(option)}
                                         onChange={() => handleCheckboxChange(option)}
+                                        className="mr-2 ml-2"
                                     />
                                     {option}
                                 </label>
@@ -77,19 +84,24 @@ const FilterMenu: React.FC = () => {
                         ))}
                     </div>
 
-                    <div>
+                    <div className="pl-1 pr-1">
                         <p>Adjust Value:</p>
                         <div>
                             {minCapacity !== null && maxCapacity !== null ? (
-                            <input
-                                type="range"
-                                min={minCapacity}
-                                max={maxCapacity}
-                                value={sliderValue}
-                                onChange={handleSliderChange}
-                            /> ) : <div/> }
+                                <input
+                                    type="range"
+                                    min={minCapacity}
+                                    max={maxCapacity}
+                                    value={sliderValue}
+                                    onChange={handleSliderChange}
+                                />
+                            ) : (
+                                <div />
+                            )}
                         </div>
-                        <span>{numberValue}</span>
+                        <div className=" flex items-center justify-center">
+                            <p> {numberValue} </p>
+                        </div>
                     </div>
                 </div>
             )}

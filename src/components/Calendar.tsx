@@ -80,8 +80,7 @@ const CalendarWithRoom: React.FC = () => {
              w-full bg-background-light dark:bg-background-dark overflow-hidden"
             ref={containerRef}
         >
-            {/* AutocompleteSelect for rooms */}
-            <div className="absolute top-0 left-0 w-full z-10 pt-2">
+            <div className="absolute top-0 left-0 w-full z-10 pt-2 flex justify-center align-middle">
                 {rooms.length > 0 && (
                     <div className="flex items-center space-x-4">
                         <AutocompleteSelect
@@ -91,12 +90,14 @@ const CalendarWithRoom: React.FC = () => {
                             }))}
                             onChange={handleRoomChange}
                         />
-                        <FilterMenu/>
+
+                        <div className="relative">
+                            <FilterMenu />
+                        </div>
                     </div>
                 )}
             </div>
 
-            {/* FullCalendar Component */}
             <div
                 className="absolute mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden"
                 style={{
