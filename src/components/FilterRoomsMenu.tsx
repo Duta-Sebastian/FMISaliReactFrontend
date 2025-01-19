@@ -1,20 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useFetchMinMaxCapacity from "@/hooks/useFetchMinMaxCapacity";
-
-const useSelectOptions = () => {
-    const [options, setOptions] = useState<string[]>([]);
-
-    useEffect(() => {
-        const fetchOptions = async () => {
-            const data = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
-            setOptions(data);
-        };
-
-        fetchOptions();
-    }, []);
-
-    return options;
-};
+import useFetchFacilities from "@/hooks/useFetchFacilities";
 
 const FilterMenu: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -22,7 +8,7 @@ const FilterMenu: React.FC = () => {
     const { minCapacity, maxCapacity } = useFetchMinMaxCapacity();
     const [sliderValue, setSliderValue] = useState<number>(50);
     const [numberValue, setNumberValue] = useState<number>(50);
-    const options = useSelectOptions();
+    const facilities = useFetchFacilities();
 
     const handleToggle = () => {
         setIsOpen((prevState) => !prevState);
@@ -69,7 +55,7 @@ const FilterMenu: React.FC = () => {
                 <div className="absolute left-0 mt-2 w-fit bg-white shadow-lg rounded-md z-20">
                     <div className="pl-1 pr-1">
                         <p>Select Options:</p>
-                        {options.map((option, index) => (
+                        {facilities.map((option, index) => (
                             <div key={index}>
                                 <label>
                                     <input

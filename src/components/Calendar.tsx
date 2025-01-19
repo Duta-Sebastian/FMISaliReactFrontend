@@ -29,7 +29,7 @@ const CalendarWithRoom: React.FC = () => {
                 const containerHeight = containerRef.current.offsetHeight;
 
                 setPageWidth(Math.min(containerWidth * 0.9, 1200));
-                setPageHeight(Math.min(containerHeight * 0.8, 800));
+                setPageHeight(Math.min(containerHeight * 0.6, 800));
 
                 setIsResized(true);
             }

@@ -48,7 +48,7 @@ export default function PDFTimetableButtons() {
             </div>
 
             {activeView === ActiveView.OrarStudenti || activeView === ActiveView.OrarProfesori ? (
-                <PdfViewer fileId={fileId} getTitle={false}/>
+                <PdfViewer fileId={fileId} getTitle={true}/>
             ) : (
                 <CalendarWithRoom/>
             )}

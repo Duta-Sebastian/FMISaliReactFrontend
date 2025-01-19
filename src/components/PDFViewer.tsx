@@ -62,8 +62,8 @@ export default function PdfViewer({ fileId, getTitle }: PdfProps) {
                 const containerWidth = containerRef.current.offsetWidth;
                 const containerHeight = containerRef.current.offsetHeight;
 
-                setPageWidth(Math.min(containerWidth * 0.9, 900));
-                setPageHeight(Math.min(containerHeight * 0.8, 600));
+                setPageWidth(Math.min(containerWidth * 0.9, 200));
+                setPageHeight(Math.min(containerHeight * 0.8, 300));
             }
         });
 
@@ -93,7 +93,7 @@ export default function PdfViewer({ fileId, getTitle }: PdfProps) {
         >
             {isTitlesReady ? (
                 <>
-                    <div className="absolute top-0 left-0 w-full z-10 pt-2">
+                    <div className="absolute top-0 left-0 w-full z-10 pt-1">
                         {getTitle && titles.size > 0 && (
                             <AutocompleteSelect
                                 key={fileId}
@@ -107,8 +107,7 @@ export default function PdfViewer({ fileId, getTitle }: PdfProps) {
                     </div>
 
                     <div
-                        className="my-react-pdf flex justify-center items-center w-full overflow-hidden"
-                        style={{ maxHeight: '80vh', maxWidth: '90%' }}
+                        className="relative pt-3 flex justify-center items-center w-full overflow-hidden"
                     >
                         <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess}>
                             {numPages ? (
@@ -128,7 +127,7 @@ export default function PdfViewer({ fileId, getTitle }: PdfProps) {
                         </Document>
                     </div>
 
-                    <div className="flex justify-center mt-4 space-x-4 z-10">
+                    <div className="relative flex justify-center mt-4 space-x-4 z-10">
                         <button
                             onClick={prevPage}
                             className="p-2 bg-primary text-button-text rounded-lg border
