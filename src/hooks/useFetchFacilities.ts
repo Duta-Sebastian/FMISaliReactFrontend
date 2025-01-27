@@ -3,6 +3,12 @@ import { useEffect, useState} from "react";
 const useFetchFacilities = () => {
     const [facilities, setFacilities] = useState<string[]>([]);
 
+    const transformStrings = (input: string[]): string[] => {
+        return input.map(str =>
+            str.replace(/(?<!^)([A-Z])/g, match => ` ${match.toLowerCase()}`)
+        );
+    };
+
     useEffect(() => {
         const fetchFacilities = async () => {
             try {
@@ -14,13 +20,12 @@ const useFetchFacilities = () => {
                 if (data.length === 0) {
                     throw new Error(`Failed to fetch facilities. Status: ${response.statusText}`);
                 }
-
-                setFacilities(data);
+                setFacilities(transformStrings(data));
             } catch (error) {
                 console.error(error);
             }
         };
-        fetchFacilities();
+        fetchFacilities().then(() => console.log("Fetched facilities"));
     }, []);
     return facilities;
 };
