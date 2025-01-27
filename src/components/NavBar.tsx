@@ -1,70 +1,53 @@
 "use client";
-import Link from "next/link"
+import Link from "next/link";
 import ThemeSwitch from "./ThemeSwitch";
-import "./Navbar.css";
+import SideBarAPP from "@/components/common/SideBarA";
 import { useState } from "react";
 
 const NavBar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
 
-    //DropDown Button
-    const [isOpen, setIsOpen] = useState(false);
-    const toggleMenu = () => {
-        setIsOpen(!isOpen);
-    };
-
-    return (
-        <nav className="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800">
-            <div className="relative">
-                <button
-                    onClick={toggleMenu}
-                    className="flex flex-col justify-center items-center space-y-1 p-2"
-                >
-                    <div className="w-6 h-1 bg-gray-800 dark:bg-gray-100"></div>
-                    <div className="w-6 h-1 bg-gray-800 dark:bg-gray-100"></div>
-                    <div className="w-6 h-1 bg-gray-800 dark:bg-gray-100"></div>
-                </button>
-                {isOpen && (
-                    <div className="absolute left-0 mt-2 p-4 bg-gray-200 text-white dark:bg-gray-900">
-                        <ul>
-                            <li className="text-lg text-gray-800 items:center dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors duration-300 ease-in-out">
-                                <Link href="/" className="block px-10 py-2">
-                                    Home
-                                </Link>
-                            </li>
-                            <li className="text-lg text-gray-800 items:center dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors duration-300 ease-in-out">
-                                <Link href="/about" className="block px-10 py-2">
-                                    Toate Sălile
-                                </Link>
-                            </li>
-                            <li className="text-lg text-gray-800 items:center dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors duration-300 ease-in-out">
-                                <Link href="/rezervare" className="block px-10 py-2">
-                                    Rezervare Sală
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
-                )}
-            </div>
-            <Link
-                href="https://fmi.unibuc.ro/"
-                className="text-lg font-serif font-bold text-gray-800 dark:text-gray-100 items-center"
-            >
-                Facultatea de Matematică și Informatică
-            </Link>
-            {/* <div className="flex-grow flex justify-center">
-                <Link
-                    href="/"
-                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700
-                     dark:bg-blue-500 dark:hover:bg-blue-600"
-                >
-                    Home
-                </Link>
-            </div> */}
-            <div className="flex-shrink-0 pl-2 items-center">
-                <ThemeSwitch/>
-            </div>
-        </nav>
-    );
+  return (
+    <nav className="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-900 h-[8vh]">
+      <div className="dark:bg-gray-800">
+      <button
+        onClick={toggleMenu}
+        className="flex flex-col justify-center items-center space-y-1 p-2"
+        >
+        <div
+            className={`w-6 h-1 bg-gray-800 dark:bg-gray-100 transition-transform duration-300 ${isOpen ? 'rotate-45 translate-y-2' : ''}`}
+        ></div>
+        <div
+            className={`w-6 h-1 bg-gray-800 dark:bg-gray-100 transition-opacity duration-300 ${isOpen ? 'opacity-0' : ''}`}
+        ></div>
+        <div
+            className={`w-6 h-1 bg-gray-800 dark:bg-gray-100 transition-transform duration-300 ${isOpen ? '-rotate-45 translate-y-[-7.5px]' : ''}`}
+        ></div>
+        </button>
+        
+        <div
+          className={`absolute left-0 mt-5 p-4 bg-gray-200 text-black dark:bg-gray-800 dark:text-white 
+            transition-all duration-300 ease-in-out ${isOpen ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-[-100%]'}`}
+        >
+          <SideBarAPP />
+        </div>
+      </div>
+      
+      <Link
+        href="https://fmi.unibuc.ro/"
+        className="text-lg font-serif font-bold text-gray-800 dark:text-gray-100 items-center"
+      >
+        Facultatea de Matematică și Informatică
+      </Link>
+      
+      <div className="flex-shrink-0 pl-2 items-center">
+        <ThemeSwitch />
+      </div>
+    </nav>
+  );
 }
 
 export default NavBar;
