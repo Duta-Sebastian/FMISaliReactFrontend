@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -6,6 +6,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import AutocompleteSelect from "./AutocompleteSelect";
 import useFetchRooms from "@/hooks/useFetchRooms";
 import FilterMenu from "@/components/FilterRoomsMenu";
+import {roomFilters} from "@/types/roomFilters";
 
 interface Event {
     title: string;
@@ -14,13 +15,17 @@ interface Event {
 }
 
 const CalendarWithRoom: React.FC = () => {
-    const { rooms, loading, error } = useFetchRooms();
+    const [filters, setFilters] = useState<roomFilters | null>(null);
     const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
     const [events, setEvents] = useState<Event[]>([]);
     const [pageWidth, setPageWidth] = useState<number>(900);
     const [pageHeight, setPageHeight] = useState<number>(600);
     const [, setIsResized] = useState<boolean>(false);
     const containerRef = useRef<HTMLDivElement>(null);
+    const rooms = useFetchRooms(filters);
+    const changeFilters = useCallback((roomFilters: roomFilters) => {
+        setFilters(roomFilters);
+    }, []);
 
     useEffect(() => {
         const resizeObserver = new ResizeObserver(() => {
@@ -48,6 +53,11 @@ const CalendarWithRoom: React.FC = () => {
         };
     }, []);
 
+    const handleRoomChange = (room: string) => {
+        setSelectedRoom(room);
+        console.log("Selected Room:", room);
+    };
+
     useEffect(() => {
         if (selectedRoom) {
             const roomEvents: Event[] = [
@@ -66,14 +76,6 @@ const CalendarWithRoom: React.FC = () => {
         }
     }, [selectedRoom]);
 
-    const handleRoomChange = (room: string) => {
-        setSelectedRoom(room);
-        console.log("Selected Room:", room);
-    };
-
-    if (loading) return <p className="text-center text-lg">Loading rooms...</p>;
-    if (error) return <p className="text-center text-lg text-red-500">Error: {error}</p>;
-
     return (
         <div
             className="relative flex flex-col justify-center items-center h-full
@@ -81,7 +83,6 @@ const CalendarWithRoom: React.FC = () => {
             ref={containerRef}
         >
             <div className="absolute top-0 left-0 w-full z-10 pt-2 flex justify-center align-middle">
-                {rooms.length > 0 && (
                     <div className="flex items-center space-x-4">
                         <AutocompleteSelect
                             options={rooms.map((room) => ({
@@ -92,10 +93,10 @@ const CalendarWithRoom: React.FC = () => {
                         />
 
                         <div className="relative">
-                            <FilterMenu />
+                            <FilterMenu
+                            onFilterChange={changeFilters}/>
                         </div>
                     </div>
-                )}
             </div>
 
             <div

@@ -1,22 +1,42 @@
 import { useEffect, useState } from "react";
+import {roomFilters} from "@/types/roomFilters";
+import {transformNLToFacilities} from "@/utils/facilitiesNameTransform";
 
 interface Room {
     label: string;
     value: number;
 }
 
-const useFetchRooms = () => {
+const useFetchRooms = (props: roomFilters | null = null) => {
     const [rooms, setRooms] = useState<Room[]>([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchRooms = async () => {
-            setLoading(true);
-            setError(null);
-
+            console.log(props);
             try {
-                const response = await fetch('https://localhost:7057/api/rooms/getAllRooms');
+                let response: Response;
+                if (!props) {
+                    console.log("No filters provided. Fetching all rooms.");
+                    response = await fetch('https://localhost:7057/api/rooms/getAllRooms');
+                }
+                else {
+                    const {minCapacity, maxCapacity, Facilities} = props as roomFilters;
+                    const facilitiesArray = transformNLToFacilities(Array.from(Facilities));
+                    const requestBody = {
+                        minCapacity,
+                        maxCapacity,
+                        Facilities: facilitiesArray,
+                    };
+
+                    response = await fetch('https://localhost:7057/api/rooms/getFilteredRooms', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(requestBody),
+                    });
+                }
+
                 if (!response.ok) {
                     throw new Error(`Failed to fetch rooms. Status:  ${response.statusText}`);
                 }
@@ -27,15 +47,13 @@ const useFetchRooms = () => {
                 }));
                 setRooms(formattedRooms);
             } catch (error) {
-                setError(error instanceof Error ? error.message : `Unknown error: ${error}`);
-            } finally {
-                setLoading(false);
+                console.error(error);
             }
         };
-        fetchRooms().then(() => console.log("Rooms fetched successfully."));
-    }, [])
+        fetchRooms();
+    }, [props])
 
-    return { rooms, loading, error };
+    return rooms;
 };
 
 export default useFetchRooms;

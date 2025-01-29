@@ -1,13 +1,8 @@
 import { useEffect, useState} from "react";
+import {transformFacilitiesToNL} from "@/utils/facilitiesNameTransform";
 
 const useFetchFacilities = () => {
     const [facilities, setFacilities] = useState<string[]>([]);
-
-    const transformStrings = (input: string[]): string[] => {
-        return input.map(str =>
-            str.replace(/(?<!^)([A-Z])/g, match => ` ${match.toLowerCase()}`)
-        );
-    };
 
     useEffect(() => {
         const fetchFacilities = async () => {
@@ -20,7 +15,7 @@ const useFetchFacilities = () => {
                 if (data.length === 0) {
                     throw new Error(`Failed to fetch facilities. Status: ${response.statusText}`);
                 }
-                setFacilities(transformStrings(data));
+                setFacilities(transformFacilitiesToNL(data));
             } catch (error) {
                 console.error(error);
             }

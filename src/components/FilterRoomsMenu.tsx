@@ -3,12 +3,14 @@ import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import useFetchMinMaxCapacity from '@/hooks/useFetchMinMaxCapacity';
 import useFetchFacilities from '@/hooks/useFetchFacilities';
+import {roomFilters} from "@/types/roomFilters";
 
-const FilterMenu: React.FC = () => {
+const FilterMenu: React.FC<{onFilterChange: (roomFilters : roomFilters) => void}> = ({onFilterChange}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOptions, setSelectedOptions] = useState<Set<string>>(new Set());
     const { minCapacity, maxCapacity } = useFetchMinMaxCapacity();
     const [range, setRange] = useState<number | number[]>();
+    const [finalRange, setFinalRange] = useState<number | number[]>();
     const facilities = useFetchFacilities();
     const menuRef = useRef<HTMLDivElement | null>(null);
     const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -29,6 +31,12 @@ const FilterMenu: React.FC = () => {
         });
     };
 
+    const handleFilterReset = () => {
+        setSelectedOptions(new Set());
+        if (minCapacity !== null && maxCapacity !== null)
+            setRange([minCapacity, maxCapacity]);
+    }
+
     useEffect(() => {
         if (minCapacity !== null && maxCapacity !== null) {
             setRange([minCapacity, maxCapacity]);
@@ -47,6 +55,17 @@ const FilterMenu: React.FC = () => {
 
         return () => window.removeEventListener("click", handleClickOutside);
     }, [isOpen]);
+
+    useEffect(() => {
+        if (!finalRange) return;
+        const [minCapacity, maxCapacity] = finalRange as number[];
+        onFilterChange(
+            {
+            minCapacity:minCapacity,
+            maxCapacity:maxCapacity,
+            Facilities:selectedOptions
+            });
+    }, [finalRange, onFilterChange, selectedOptions]);
 
     return (
         <div className="relative">
@@ -93,7 +112,10 @@ const FilterMenu: React.FC = () => {
                                     min={minCapacity ?? 0}
                                     max={maxCapacity ?? 240}
                                     value={range}
-                                    onChange={(newRange: number | number[]) => setRange(newRange)}
+                                    onChange={(newRange: number | number[]) => {
+                                        setRange(newRange);
+                                    }}
+                                    onChangeComplete={(newRange: number | number[]) => setFinalRange(newRange)}
                                     styles={{
                                         track: {
                                             backgroundColor: '#3B82F6',
@@ -112,12 +134,19 @@ const FilterMenu: React.FC = () => {
                             )}
                         </div>
 
-                        {/* Selected Range Display */}
                         <div className="flex items-center justify-center">
                             <p className="text-gray-900 dark:text-white">
                                 Selected Range: {Array.isArray(range) ? range.join(' - ') : range}
                             </p>
                         </div>
+                    </div>
+                    <div className="flex items-center justify-center">
+                        <button className="p-2 bg-primary text-white rounded-lg focus:outline-none
+                                hover:bg-primary-dark transition-colors"
+                                onClick={handleFilterReset}
+                                >
+                            Resetează filtrele
+                        </button>
                     </div>
                 </div>
             )}

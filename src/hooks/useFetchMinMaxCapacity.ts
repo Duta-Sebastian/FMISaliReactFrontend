@@ -26,7 +26,7 @@ const useFetchMinMaxCapacity = () => {
 
         fetchMinMaxCapacity();
     }, []);
-    return { minCapacity, maxCapacity };
+    return {minCapacity, maxCapacity};
 };
 
 export default useFetchMinMaxCapacity;
