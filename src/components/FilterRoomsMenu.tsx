@@ -62,13 +62,23 @@ const FilterMenu: React.FC<{onFilterChange: (roomFilters : roomFilters) => void}
             <button
                 onClick={handleToggle}
                 ref={buttonRef}
-                className="p-2 bg-primary text-white rounded-lg focus:outline-none hover:bg-primary-dark transition-colors"
+                className="flex flex-col justify-center items-center space-y-1 p-2"
             >
-                <div className="w-6 h-6 flex flex-col justify-between items-center">
-                    <span className="block w-6 h-1 bg-white"></span>
-                    <span className="block w-6 h-1 bg-white"></span>
-                    <span className="block w-6 h-1 bg-white"></span>
-                </div>
+                <div
+                    className={`w-6 h-1 bg-gray-800 dark:bg-gray-100 transition-transform duration-300 ${
+                        isOpen ? "rotate-45 translate-y-2" : ""
+                    }`}
+                ></div>
+                <div
+                    className={`w-6 h-1 bg-gray-800 dark:bg-gray-100 transition-opacity duration-300 ${
+                        isOpen ? "opacity-0" : ""
+                    }`}
+                ></div>
+                <div
+                    className={`w-6 h-1 bg-gray-800 dark:bg-gray-100 transition-transform duration-300 ${
+                        isOpen ? "-rotate-45 translate-y-[-7.5px]" : ""
+                    }`}
+                ></div>
             </button>
 
             {isOpen && (

@@ -60,7 +60,7 @@ const NavBar = () => {
                 }`}
                 ref={menuRef}
             >
-                <SideBarAPP />
+                <SideBarAPP setIsOpenAction={setIsOpen}/>
             </div>
         </nav>
     );
