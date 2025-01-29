@@ -12,7 +12,6 @@ const useFetchRooms = (props: roomFilters | null = null) => {
 
     useEffect(() => {
         const fetchRooms = async () => {
-            console.log(props);
             try {
                 let response: Response;
                 if (!props) {
@@ -45,6 +44,7 @@ const useFetchRooms = (props: roomFilters | null = null) => {
                     label: room.name,
                     value: room.id,
                 }));
+                console.log(formattedRooms);
                 setRooms(formattedRooms);
             } catch (error) {
                 console.error(error);

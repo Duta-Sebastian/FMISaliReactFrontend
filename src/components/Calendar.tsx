@@ -18,39 +18,12 @@ const CalendarWithRoom: React.FC = () => {
     const [filters, setFilters] = useState<roomFilters | null>(null);
     const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
     const [events, setEvents] = useState<Event[]>([]);
-    const [pageWidth, setPageWidth] = useState<number>(900);
-    const [pageHeight, setPageHeight] = useState<number>(600);
-    const [, setIsResized] = useState<boolean>(false);
+    const [pageWidth,] = useState<number>(900);
+    const [pageHeight,] = useState<number>(600);
     const containerRef = useRef<HTMLDivElement>(null);
     const rooms = useFetchRooms(filters);
     const changeFilters = useCallback((roomFilters: roomFilters) => {
         setFilters(roomFilters);
-    }, []);
-
-    useEffect(() => {
-        const resizeObserver = new ResizeObserver(() => {
-            if (containerRef.current) {
-                const containerWidth = containerRef.current.offsetWidth;
-                const containerHeight = containerRef.current.offsetHeight;
-
-                setPageWidth(Math.min(containerWidth * 0.9, 1200));
-                setPageHeight(Math.min(containerHeight * 0.6, 800));
-
-                setIsResized(true);
-            }
-        });
-
-        if (containerRef.current) {
-            resizeObserver.observe(containerRef.current);
-        }
-
-        return () => {
-            const {current} = containerRef;
-            if (!current) {
-                return;
-            }
-            resizeObserver.unobserve(current);
-        };
     }, []);
 
     const handleRoomChange = (room: string) => {
@@ -78,11 +51,11 @@ const CalendarWithRoom: React.FC = () => {
 
     return (
         <div
-            className="relative flex flex-col justify-center items-center h-full
-             w-full bg-background-light dark:bg-background-dark overflow-hidden"
+            className="relative flex flex-col justify-center items-center
+             bg-background-light dark:bg-background-dark"
             ref={containerRef}
         >
-            <div className="absolute top-0 left-0 w-full z-10 pt-2 flex justify-center align-middle">
+            <div className="top-0 left-0 w-full pt-2 flex justify-center align-middle">
                     <div className="flex items-center space-x-4">
                         <AutocompleteSelect
                             options={rooms.map((room) => ({
@@ -92,7 +65,7 @@ const CalendarWithRoom: React.FC = () => {
                             onChange={handleRoomChange}
                         />
 
-                        <div className="relative">
+                        <div>
                             <FilterMenu
                             onFilterChange={changeFilters}/>
                         </div>
@@ -100,7 +73,7 @@ const CalendarWithRoom: React.FC = () => {
             </div>
 
             <div
-                className="absolute mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden"
+                className="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden"
                 style={{
                     width: `${pageWidth}px`,
                     height: `${pageHeight}px`,
