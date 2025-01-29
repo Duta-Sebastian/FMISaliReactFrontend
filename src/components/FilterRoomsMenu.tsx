@@ -4,6 +4,7 @@ import 'rc-slider/assets/index.css';
 import useFetchMinMaxCapacity from '@/hooks/useFetchMinMaxCapacity';
 import useFetchFacilities from '@/hooks/useFetchFacilities';
 import {roomFilters} from "@/types/roomFilters";
+import useOutsideClick from "@/hooks/useOutsideClick";
 
 const FilterMenu: React.FC<{onFilterChange: (roomFilters : roomFilters) => void}> = ({onFilterChange}) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -43,18 +44,7 @@ const FilterMenu: React.FC<{onFilterChange: (roomFilters : roomFilters) => void}
         }
     }, [minCapacity, maxCapacity]);
 
-    useEffect(() => {
-        if (!isOpen)
-            return;
-        const handleClickOutside = (e: MouseEvent) => {
-            if(menuRef.current && !menuRef.current.contains(e.target as Node)
-                && buttonRef.current && !buttonRef.current.contains(e.target as Node))
-                setIsOpen(false);
-        }
-        window.addEventListener("click", handleClickOutside);
-
-        return () => window.removeEventListener("click", handleClickOutside);
-    }, [isOpen]);
+    useOutsideClick(menuRef,buttonRef,setIsOpen);
 
     useEffect(() => {
         if (!finalRange) return;

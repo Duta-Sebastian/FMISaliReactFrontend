@@ -2,19 +2,26 @@
 import Link from "next/link";
 import ThemeSwitch from "./ThemeSwitch";
 import SideBarAPP from "@/components/common/SideBarA";
-import { useState } from "react";
+import {useRef, useState} from "react";
+import useOutsideClick from "@/hooks/useOutsideClick";
 
 const NavBar = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const menuRef = useRef<HTMLDivElement | null>(null);
+    const buttonRef = useRef<HTMLButtonElement | null>(null);
+
     const toggleMenu = () => {
         setIsOpen(!isOpen);
     };
+
+    useOutsideClick(menuRef,buttonRef,setIsOpen);
 
     return (
         <nav className="relative flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-900 h-[8vh] z-50">
             <div className="flex items-center">
                 <button
                     onClick={toggleMenu}
+                    ref={buttonRef}
                     className="flex flex-col justify-center items-center space-y-1 p-2"
                 >
                     <div
@@ -51,6 +58,7 @@ const NavBar = () => {
                 dark:text-white p-4 transition-transform duration-300 ease-in-out z-50 ${
                     isOpen ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0 pointer-events-none"
                 }`}
+                ref={menuRef}
             >
                 <SideBarAPP />
             </div>
