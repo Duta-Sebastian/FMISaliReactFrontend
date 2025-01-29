@@ -93,17 +93,13 @@ const CalendarWithRoom: React.FC = () => {
                     slotMaxTime="22:00:00"
                     slotDuration="00:30:00"
                     eventResizableFromStart={false}
-                    eventClassNames="bg-blue-500 text-white font-semibold rounded-lg shadow-md"
+                    eventClassNames="h-full w-full bg-blue-500 text-white font-semibold rounded-lg shadow-md dark:bg-blue-700 dark:text-gray-100"
                     eventContent={(arg) => (
                         <div
+                            className="w-full h-full flex justify-center items-center bg-blue-500 text-white dark:bg-blue-700 dark:text-gray-100"
                             style={{
-                                width: "100%",
-                                height: "100%",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                backgroundColor: "rgb(59, 130, 246)",
-                                color: "white",
+                                borderRadius: "0.5rem",
+                                boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
                             }}
                         >
                             {arg.event.title}
@@ -116,6 +112,7 @@ const CalendarWithRoom: React.FC = () => {
                     eventOverlap={false}
                     allDaySlot={false}
                     firstDay={1}
+                    dayHeaderClassNames="dark:text-white"
                 />
             </div>
         </div>

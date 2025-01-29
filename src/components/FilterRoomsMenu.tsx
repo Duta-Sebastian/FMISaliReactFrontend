@@ -141,8 +141,8 @@ const FilterMenu: React.FC<{onFilterChange: (roomFilters : roomFilters) => void}
                         </div>
                     </div>
                     <div className="flex items-center justify-center">
-                        <button className="p-2 bg-primary text-white rounded-lg focus:outline-none
-                                hover:bg-primary-dark transition-colors"
+                        <button className="p-2 bg-primary rounded-lg focus:outline-none
+                                hover:bg-primary-dark transition-colors text-gray-900 dark:text-white"
                                 onClick={handleFilterReset}
                                 >
                             Resetează filtrele

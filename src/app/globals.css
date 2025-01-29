@@ -69,3 +69,17 @@ body {
     font-size: 0.625rem;
   }
 }
+
+@layer components {
+  .fc-header-toolbar .fc-toolbar-title {
+    color: inherit;
+  }
+
+  .dark .fc-header-toolbar .fc-toolbar-title {
+    color: white;
+  }
+
+  .dark .fc-timegrid-slot-label {
+    color: white !important;
+  }
+}

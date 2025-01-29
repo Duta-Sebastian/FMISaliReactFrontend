@@ -48,8 +48,8 @@ const NavBar = () => {
 
             <div
                 className={`absolute top-full left-0 bg-gray-200 text-black dark:bg-gray-800
-                 dark:text-white p-4 transition-transform duration-300 ease-in-out z-50 ${
-                    isOpen ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
+                dark:text-white p-4 transition-transform duration-300 ease-in-out z-50 ${
+                    isOpen ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0 pointer-events-none"
                 }`}
             >
                 <SideBarAPP />
