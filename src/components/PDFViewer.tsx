@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import { Document, Page } from 'react-pdf';
 import { useFetchPDF } from '@/hooks/useFetchPDF';
 import usePdfTitles from '@/hooks/useTitlesPDF';
@@ -18,8 +18,8 @@ interface PdfProps {
 export default function PdfViewer({ fileId, getTitle }: PdfProps) {
     const [numPages, setNumPages] = useState<number | null>(null);
     const [pageNumber, setPageNumber] = useState<number>(1);
-    const [pageWidth, setPageWidth] = useState<number>(900);
-    const [pageHeight, setPageHeight] = useState<number>(500);
+    const [pageWidth, ] = useState<number>(900);
+    const [pageHeight, ] = useState<number>(500);
     const [isTitlesReady, setIsTitlesReady] = useState(false);
     const pdfUrl = useFetchPDF(fileId);
     const titles = usePdfTitles(pdfUrl);
@@ -41,43 +41,35 @@ export default function PdfViewer({ fileId, getTitle }: PdfProps) {
         }
     };
 
-    const prevPage = () => {
+    const prevPage = useCallback(() => {
         setPageNumber((prevPage) => (prevPage === 1 ? (numPages || 1) : prevPage - 1));
-    };
+    },[numPages]);
 
-    const nextPage = () => {
+    const nextPage = useCallback(() => {
         setPageNumber((prevPage) => (prevPage === (numPages || 1) ? 1 : prevPage + 1));
-    };
+    }, [numPages]);
 
     const swipeHandlers = useSwipeable({
         onSwipedLeft: nextPage,
         onSwipedRight: prevPage,
-        preventScrollOnSwipe: true,
-        trackMouse: true,
     });
 
+    // Add keyboard event listener for arrow keys
     useEffect(() => {
-        const resizeObserver = new ResizeObserver(() => {
-            if (containerRef.current) {
-                const containerWidth = containerRef.current.offsetWidth;
-                const containerHeight = containerRef.current.offsetHeight;
-
-                setPageWidth(Math.min(containerWidth * 0.9, 200));
-                setPageHeight(Math.min(containerHeight * 0.8, 300));
-            }
-        });
-
-        if (containerRef.current) {
-            resizeObserver.observe(containerRef.current);
-        }
-
-        return () => {
-            const { current } = containerRef;
-            if (current) {
-                resizeObserver.unobserve(current);
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'ArrowLeft') {
+                prevPage();
+            } else if (event.key === 'ArrowRight') {
+                nextPage();
             }
         };
-    }, []);
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [prevPage, nextPage]);
 
     useEffect(() => {
         if (titles && titles.size > 0) {
@@ -88,13 +80,13 @@ export default function PdfViewer({ fileId, getTitle }: PdfProps) {
     return (
         <div
             {...swipeHandlers}
-            className="relative flex flex-col justify-center items-center h-full w-full bg-background-light dark:bg-background-dark p-4 overflow-hidden"
+            className="flex flex-col justify-center items-center h-full w-full bg-background-light dark:bg-background-dark p-4 overflow-hidden"
             ref={containerRef}
         >
             {isTitlesReady ? (
                 <>
-                    <div className="absolute top-0 left-0 w-full z-10 pt-1">
-                        {getTitle && titles.size > 0 && (
+                    {getTitle && titles.size > 0 && (
+                        <div className="w-full mb-4 z-10">
                             <AutocompleteSelect
                                 key={fileId}
                                 options={Array.from(titles.entries()).map(([key, value]) => ({
@@ -103,12 +95,10 @@ export default function PdfViewer({ fileId, getTitle }: PdfProps) {
                                 }))}
                                 onChange={goToPage}
                             />
-                        )}
-                    </div>
+                        </div>
+                    )}
 
-                    <div
-                        className="relative pt-3 flex justify-center items-center w-full overflow-hidden"
-                    >
+                    <div className="w-full flex justify-center items-center">
                         <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess}>
                             {numPages ? (
                                 <Page
@@ -119,28 +109,23 @@ export default function PdfViewer({ fileId, getTitle }: PdfProps) {
                                     renderTextLayer={true}
                                 />
                             ) : (
-                                <div className="flex justify-center
-                                 items-center text-lg text-gray-600">
+                                <div className="flex justify-center items-center text-lg text-gray-600">
                                     Loading PDF...
                                 </div>
                             )}
                         </Document>
                     </div>
 
-                    <div className="relative flex justify-center mt-4 space-x-4 z-10">
+                    <div className="flex justify-center mt-4 space-x-4">
                         <button
                             onClick={prevPage}
-                            className="p-2 bg-primary text-button-text rounded-lg border
-                             border-button-border-color dark:bg-primary-dark dark:border-button-border-color
-                              dark:text-button-text hover:bg-primary-hover dark:hover:bg-primary-dark-hover"
+                            className="p-2 bg-primary text-button-text rounded-lg border border-button-border-color dark:bg-primary-dark dark:border-button-border-color dark:text-button-text hover:bg-primary-hover dark:hover:bg-primary-dark-hover"
                         >
                             Previous
                         </button>
                         <button
                             onClick={nextPage}
-                            className="p-2 bg-primary text-button-text rounded-lg border
-                             border-button-border-color dark:bg-primary-dark dark:border-button-border-color
-                              dark:text-button-text hover:bg-primary-hover dark:hover:bg-primary-dark-hover"
+                            className="p-2 bg-primary text-button-text rounded-lg border border-button-border-color dark:bg-primary-dark dark:border-button-border-color dark:text-button-text hover:bg-primary-hover dark:hover:bg-primary-dark-hover"
                         >
                             Next
                         </button>

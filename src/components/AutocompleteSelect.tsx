@@ -43,7 +43,7 @@ const AutocompleteSelect: React.FC<AutocompleteSelectProps> = ({ options, onChan
     }, [options]);
 
     return (
-        <div className="flex justify-center items-center pb-4 z-10 w-full">
+        <div className="flex justify-center items-center pb-4 z-20 w-full">
             <div className="w-full max-w-lg flex justify-center items-center">
                 {isReady ? (
                     <Select

@@ -5,7 +5,7 @@ import React from "react";
 
 export default function orarStudenti() {
     return (
-        <div className="relative -z-10">
+        <div>
             <PdfViewer fileId={1} getTitle={true}/>
         </div>
     )

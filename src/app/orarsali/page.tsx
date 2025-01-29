@@ -5,7 +5,7 @@ import CalendarWithRoom from "@/components/Calendar";
 
 export default function orarStudenti() {
     return (
-        <div className="-z-10">
+        <div>
             <CalendarWithRoom/>
         </div>
     )
