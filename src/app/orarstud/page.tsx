@@ -1,5 +1,3 @@
-"use client";
-
 import PdfViewer from "@/components/PDFViewer";
 import React from "react";
 
