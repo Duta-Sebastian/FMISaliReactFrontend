@@ -3,10 +3,10 @@ import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import useFetchMinMaxCapacity from '@/hooks/useFetchMinMaxCapacity';
 import useFetchFacilities from '@/hooks/useFetchFacilities';
-import {roomFilters} from "@/types/roomFilters";
+import {roomFilter} from "@/types/roomFilter";
 import useOutsideClick from "@/hooks/useOutsideClick";
 
-const FilterMenu: React.FC<{onFilterChange: (roomFilters : roomFilters) => void}> = ({onFilterChange}) => {
+const FilterMenu: React.FC<{onFilterChange: (roomFilters : roomFilter) => void}> = ({onFilterChange}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOptions, setSelectedOptions] = useState<Set<string>>(new Set());
     const { minCapacity, maxCapacity } = useFetchMinMaxCapacity();

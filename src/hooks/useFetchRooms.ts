@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {roomFilters} from "@/types/roomFilters";
+import {roomFilter} from "@/types/roomFilter";
 import {transformNLToFacilities} from "@/utils/facilitiesNameTransform";
 
 interface Room {
@@ -7,7 +7,7 @@ interface Room {
     value: number;
 }
 
-const useFetchRooms = (props: roomFilters | null = null) => {
+const useFetchRooms = (props: roomFilter | null = null) => {
     const [rooms, setRooms] = useState<Room[]>([]);
 
     useEffect(() => {
@@ -19,7 +19,7 @@ const useFetchRooms = (props: roomFilters | null = null) => {
                     response = await fetch('https://localhost:7057/api/rooms/getAllRooms');
                 }
                 else {
-                    const {minCapacity, maxCapacity, Facilities} = props as roomFilters;
+                    const {minCapacity, maxCapacity, Facilities} = props as roomFilter;
                     const facilitiesArray = transformNLToFacilities(Array.from(Facilities));
                     const requestBody = {
                         minCapacity,
@@ -44,13 +44,12 @@ const useFetchRooms = (props: roomFilters | null = null) => {
                     label: room.name,
                     value: room.id,
                 }));
-                console.log(formattedRooms);
                 setRooms(formattedRooms);
             } catch (error) {
                 console.error(error);
             }
         };
-        fetchRooms();
+        fetchRooms().then(() => {});
     }, [props])
 
     return rooms;

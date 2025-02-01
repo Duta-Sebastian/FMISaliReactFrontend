@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, {useCallback, useRef, useState} from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -8,23 +8,18 @@ import interactionPlugin from "@fullcalendar/interaction";
 import AutocompleteSelect from "./AutocompleteSelect";
 import useFetchRooms from "@/hooks/useFetchRooms";
 import FilterMenu from "@/components/FilterRoomsMenu";
-import {roomFilters} from "@/types/roomFilters";
-
-interface Event {
-    title: string;
-    start: string;
-    end: string;
-}
+import {roomFilter} from "@/types/roomFilter";
+import useFetchRoomSchedule from "@/hooks/useFetchRoomSchedule";
 
 const CalendarWithRoom: React.FC = () => {
-    const [filters, setFilters] = useState<roomFilters | null>(null);
+    const [filters, setFilters] = useState<roomFilter | null>(null);
     const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
-    const [events, setEvents] = useState<Event[]>([]);
+    const {events} = useFetchRoomSchedule(selectedRoom);
     const [pageWidth,] = useState<number>(900);
     const [pageHeight,] = useState<number>(600);
     const containerRef = useRef<HTMLDivElement>(null);
     const rooms = useFetchRooms(filters);
-    const changeFilters = useCallback((roomFilters: roomFilters) => {
+    const changeFilters = useCallback((roomFilters: roomFilter) => {
         setFilters(roomFilters);
     }, []);
 
@@ -32,24 +27,6 @@ const CalendarWithRoom: React.FC = () => {
         setSelectedRoom(room);
         console.log("Selected Room:", room);
     };
-
-    useEffect(() => {
-        if (selectedRoom) {
-            const roomEvents: Event[] = [
-                {
-                    title: `${selectedRoom} Event 1`,
-                    start: "2025-01-20T08:00:00",
-                    end: "2025-01-20T10:00:00",
-                },
-                {
-                    title: `${selectedRoom} Event 2`,
-                    start: "2025-01-21T09:00:00",
-                    end: "2025-01-21T11:00:00",
-                },
-            ];
-            setEvents(roomEvents);
-        }
-    }, [selectedRoom]);
 
     return (
         <div
@@ -85,6 +62,9 @@ const CalendarWithRoom: React.FC = () => {
                     plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                     initialView="timeGridWeek"
                     events={events}
+                    eventDidMount={(arg) => {
+                        console.log("Event Rendered:", arg.event);
+                    }}
                     height="100%"
                     headerToolbar={{
                         left: "prev,next today",
@@ -107,7 +87,7 @@ const CalendarWithRoom: React.FC = () => {
                             {arg.event.title}
                         </div>
                     )}
-                    locale="ro-RO"
+                    timeZone="UTC"
                     eventBackgroundColor="rgb(59, 130, 246)"
                     eventBorderColor="rgb(29, 78, 216)"
                     eventTextColor="white"

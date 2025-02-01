@@ -21,7 +21,6 @@ export default function PdfViewer({ fileId, getTitle }: PdfProps) {
     const [pageWidth, ] = useState<number>(900);
     const [pageHeight, ] = useState<number>(500);
     const [isTitlesReady, setIsTitlesReady] = useState(false);
-    console.log(fileId);
     const pdfUrl = useFetchPDF(fileId);
     const titles = usePdfTitles(pdfUrl);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -55,7 +54,6 @@ export default function PdfViewer({ fileId, getTitle }: PdfProps) {
         onSwipedRight: prevPage,
     });
 
-    // Add keyboard event listener for arrow keys
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === 'ArrowLeft') {
