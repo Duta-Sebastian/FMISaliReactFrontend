@@ -24,8 +24,9 @@ const CalendarWithRoom: React.FC = () => {
     }, []);
 
     const handleRoomChange = (room: string) => {
+        if (selectedRoom === room)
+            return;
         setSelectedRoom(room);
-        console.log("Selected Room:", room);
     };
 
     return (

@@ -12,6 +12,8 @@ const AutocompleteSelect: React.FC<AutocompleteSelectProps> = ({ options, onChan
     const [isReady, setIsReady] = useState<boolean>(false);
 
     const handleInputChange = (newValue: string) => {
+        if (newValue === inputValue)
+            return;
         setInputValue(newValue);
         onChange(newValue);
     };
@@ -65,7 +67,7 @@ const AutocompleteSelect: React.FC<AutocompleteSelectProps> = ({ options, onChan
                                 borderRadius: '6px',
                                 borderColor: '#D1D5DB',
                                 boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
-                                backgroundColor: 'var(--select-bg-light)',
+                                backgroundColor: 'dark:var(--select-bg-light)',
                                 color: 'var(--select-text-light)',
                                 justifyContent: 'center',
                                 '&:hover': {
