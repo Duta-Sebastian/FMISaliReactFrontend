@@ -22,7 +22,6 @@ const useFetchRoomSchedule = (roomName : string | null) => {
                     start: event.start.toLocaleString(),
                     end: event.end.toLocaleString()
                 }));
-                console.log("Schedule events", events);
                 setScheduleEvents(events);
             }
             catch {

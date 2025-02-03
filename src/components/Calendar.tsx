@@ -63,9 +63,6 @@ const CalendarWithRoom: React.FC = () => {
                     plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                     initialView="timeGridWeek"
                     events={events}
-                    eventDidMount={(arg) => {
-                        console.log("Event Rendered:", arg.event);
-                    }}
                     height="100%"
                     headerToolbar={{
                         left: "prev,next today",
@@ -88,7 +85,8 @@ const CalendarWithRoom: React.FC = () => {
                             {arg.event.title}
                         </div>
                     )}
-                    timeZone="UTC"
+                    timeZone="GMT+2"
+                    locale="RO-ro"
                     eventBackgroundColor="rgb(59, 130, 246)"
                     eventBorderColor="rgb(29, 78, 216)"
                     eventTextColor="white"
