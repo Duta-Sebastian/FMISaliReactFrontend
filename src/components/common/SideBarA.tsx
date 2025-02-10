@@ -19,108 +19,94 @@ export default function SideBarAPP({ setIsOpenAction }: SideBarProps) {
         <Sidebar.Items>
           <Sidebar.ItemGroup>
             <Link href="/" passHref legacyBehavior>
-              <a className="block w-full">
-                <Sidebar.Item
-                    as="div"
-                    className="text-lg hover:bg-gray-400 dark:hover:bg-gray-700"
-                    onClick={handleLinkClick}
-                >
-                  <div className="flex items-center justify-between w-full px-4 py-2 cursor-pointer">
-                    <HiHome />
-                    Home
-                  </div>
-                </Sidebar.Item>
-              </a>
+              <Sidebar.Item
+                  as="div"
+                  className="text-lg hover:bg-gray-400 dark:hover:bg-gray-700"
+                  onClick={handleLinkClick}
+              >
+                <div className="flex items-center justify-center w-full px-4 py-2 cursor-pointer">
+                  <HiHome className="mr-2" />
+                  Home
+                </div>
+              </Sidebar.Item>
             </Link>
 
             <Link href="/orarstud" passHref legacyBehavior>
-              <a className="block w-full">
-                <Sidebar.Item
-                    as="div"
-                    className="text-lg hover:bg-gray-400 dark:hover:bg-gray-700"
-                    onClick={handleLinkClick}
-                >
-                  <div className="flex items-center justify-between w-full px-4 py-2 cursor-pointer">
-                    <HiCalendarDays />
-                    Orar Studenți
-                  </div>
-                </Sidebar.Item>
-              </a>
+              <Sidebar.Item
+                  as="div"
+                  className="text-lg hover:bg-gray-400 dark:hover:bg-gray-700"
+                  onClick={handleLinkClick}
+              >
+                <div className="flex items-center justify-center w-full px-4 py-2 cursor-pointer">
+                  <HiCalendarDays className="mr-2" />
+                  Orar Studenți
+                </div>
+              </Sidebar.Item>
             </Link>
 
             <Link href="/orarprof" passHref legacyBehavior>
-              <a className="block w-full">
-                <Sidebar.Item
-                    as="div"
-                    className="text-lg hover:bg-gray-400 dark:hover:bg-gray-700"
-                    onClick={handleLinkClick}
-                >
-                  <div className="flex items-center justify-between w-full px-4 py-2 cursor-pointer">
-                    <HiCalendarDays />
-                    Orar Profesori
-                  </div>
-                </Sidebar.Item>
-              </a>
+              <Sidebar.Item
+                  as="div"
+                  className="text-lg hover:bg-gray-400 dark:hover:bg-gray-700"
+                  onClick={handleLinkClick}
+              >
+                <div className="flex items-center justify-center w-full px-4 py-2 cursor-pointer">
+                  <HiCalendarDays className="mr-2" />
+                  Orar Profesori
+                </div>
+              </Sidebar.Item>
             </Link>
 
             <Link href="/orarsali" passHref legacyBehavior>
-              <a className="block w-full">
-                <Sidebar.Item
-                    as="div"
-                    className="text-lg hover:bg-gray-400 dark:hover:bg-gray-700"
-                    onClick={handleLinkClick}
-                >
-                  <div className="flex items-center justify-between w-full px-4 py-2 cursor-pointer">
-                    <HiCalendarDays />
-                    Orar Săli
-                  </div>
-                </Sidebar.Item>
-              </a>
+              <Sidebar.Item
+                  as="div"
+                  className="text-lg hover:bg-gray-400 dark:hover:bg-gray-700"
+                  onClick={handleLinkClick}
+              >
+                <div className="flex items-center justify-center w-full px-4 py-2 cursor-pointer">
+                  <HiCalendarDays className="mr-2" />
+                  Orar Săli
+                </div>
+              </Sidebar.Item>
             </Link>
 
             <Link href="/Rezervare" passHref legacyBehavior>
-              <a className="block w-full">
-                <Sidebar.Item
-                    as="div"
-                    className="text-lg hover:bg-gray-400 dark:hover:bg-gray-700"
-                    onClick={handleLinkClick}
-                >
-                  <div className="flex items-center justify-between w-full px-4 py-2 cursor-pointer">
-                    <HiPresentationChartBar />
-                    Rezervare Săli
-                  </div>
-                </Sidebar.Item>
-              </a>
+              <Sidebar.Item
+                  as="div"
+                  className="text-lg hover:bg-gray-400 dark:hover:bg-gray-700"
+                  onClick={handleLinkClick}
+              >
+                <div className="flex items-center justify-center w-full px-4 py-2 cursor-pointer">
+                  <HiPresentationChartBar className="mr-2" />
+                  Rezervare Săli
+                </div>
+              </Sidebar.Item>
             </Link>
 
             <Link href="/verificare" passHref legacyBehavior>
-              <a className="block w-full">
-                <Sidebar.Item
-                    as="div"
-                    className="text-lg hover:bg-gray-400 dark:hover:bg-gray-700"
-                    onClick={handleLinkClick}
-                >
-                  <div className="flex items-center justify-between w-full px-4 py-2 cursor-pointer">
-                    <HiTicket />
-                    Verificare Săli
-                  </div>
-                </Sidebar.Item>
-              </a>
+              <Sidebar.Item
+                  as="div"
+                  className="text-lg hover:bg-gray-400 dark:hover:bg-gray-700"
+                  onClick={handleLinkClick}
+              >
+                <div className="flex items-center justify-center w-full px-4 py-2 cursor-pointer">
+                  <HiTicket className="mr-2" />
+                  Verificare Săli
+                </div>
+              </Sidebar.Item>
             </Link>
 
             <Link href="/autentificare" passHref legacyBehavior>
-              <a className="block w-full">
-                <Sidebar.Item
-                    as="div"
-                    className="text-lg hover:bg-gray-400 dark:hover:bg-gray-700"
-                    onClick={handleLinkClick}
-                >
-                  <div className="flex items-center justify-between w-full px-4 py-2 cursor-pointer">
-                    <HiArrowSmRight />
-                    Sign In
-                  </div>
-                </Sidebar.Item>
-              </a>
+              <Sidebar.Item
+                  as="div"
+                  className="text-lg hover:bg-gray-400 dark:hover:bg-gray-700"
+                  onClick={handleLinkClick}
+              >
+                <div className="flex items-center justify-center w-full px-4 py-2 cursor-pointer">
+                  <HiArrowSmRight className="mr-2" />
+                  Sign In
+                </div>
+              </Sidebar.Item>
             </Link>
           </Sidebar.ItemGroup>
         </Sidebar.Items>

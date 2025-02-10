@@ -85,7 +85,7 @@ const CalendarWithRoom: React.FC = () => {
                             {arg.event.title}
                         </div>
                     )}
-                    timeZone="GMT+2"
+                    timeZone="local"
                     locale="RO-ro"
                     eventBackgroundColor="rgb(59, 130, 246)"
                     eventBorderColor="rgb(29, 78, 216)"
