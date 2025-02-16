@@ -11,7 +11,7 @@ const FilterMenu: React.FC<{onFilterChange: (roomFilters : roomFilter) => void}>
     const [selectedOptions, setSelectedOptions] = useState<Set<string>>(new Set());
     const { minCapacity, maxCapacity } = useFetchMinMaxCapacity();
     const [range, setRange] = useState<number | number[]>();
-    const [finalRange, setFinalRange] = useState<number | number[]>();
+    const [finalRange, setFinalRange] = useState<number | number[]>([minCapacity? minCapacity:25, maxCapacity? maxCapacity:300]);
     const facilities = useFetchFacilities();
     const menuRef = useRef<HTMLDivElement | null>(null);
     const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -82,9 +82,7 @@ const FilterMenu: React.FC<{onFilterChange: (roomFilters : roomFilter) => void}>
             </button>
 
             {isOpen && (
-                <div className="absolute left-0 mt-2 w-64 bg-white
-                 dark:bg-gray-800 shadow-lg rounded-md z-20"
-                 ref={menuRef}>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 max-w-[90vw] bg-white dark:bg-gray-800 shadow-lg rounded-md z-20" ref={menuRef}>
                     <div className="p-4">
                         <p className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                             Select Options:

@@ -19,10 +19,9 @@ const useFetchRoomSchedule = (roomName : string | null) => {
                 }
                 const events: CalendarEvent[] = data.map((event: CalendarEvent) => ({
                     title: event.title,
-                    start: event.start.toLocaleString(),
-                    end: event.end.toLocaleString()
+                    start: new Date(event.start).toISOString(),
+                    end: new Date(event.end).toISOString(),
                 }));
-                console.log("Schedule events", events);
                 setScheduleEvents(events);
             }
             catch {
