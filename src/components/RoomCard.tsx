@@ -17,12 +17,12 @@ const RoomCard: React.FC<RoomCardProp> = ({ name, type, capacity, facilities }) 
 
                 <div className="mt-3">
                     <p className="text-gray-700 dark:text-gray-300 font-medium">
-                        Capacity: <span className="font-semibold">{capacity} people</span>
+                        Capacitate: <span className="font-semibold">{capacity} { capacity == 1 ? "om" : "oameni"}</span>
                     </p>
                 </div>
 
                 <div className="mt-3">
-                    <h3 className="text-gray-700 dark:text-gray-300 font-medium">Facilities:</h3>
+                    <h3 className="text-gray-700 dark:text-gray-300 font-medium">Facilități:</h3>
                     <ul className="list-disc list-inside text-gray-600 dark:text-gray-400 text-sm">
                         {facilities.map((facility, index) => (
                             <li key={index}>{facility}</li>

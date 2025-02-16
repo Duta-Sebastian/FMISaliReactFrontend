@@ -35,7 +35,7 @@ const useFetchAvailableRooms = (dateRange: DateRange | null, roomFilter: roomFil
                     name: room.name,
                     type: room.type,
                     capacity: room.capacity,
-                    facilities: room.facilities?.length ? transformFacilitiesToNL(room.facilities) : ['No facilities available']
+                    facilities: room.facilities?.length ? transformFacilitiesToNL(room.facilities) : ['Nu există facilități disponibile.']
                 }));
                 setAvailableRooms(availableRooms);
             }
