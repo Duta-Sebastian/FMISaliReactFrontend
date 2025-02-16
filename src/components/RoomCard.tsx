@@ -11,7 +11,7 @@ const RoomCard: React.FC<RoomCardProp> = ({ name, type, capacity, facilities }) 
             onMouseLeave={() => setShowButtons(false)}
             onClick={() => setShowButtons(prev => !prev)}
         >
-            <div className={`transition-all duration-200 ${showButtons ? "blur-md" : ""}`}>
+            <div className="transition-all duration-200">
                 <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">{name}</h2>
                 <p className="text-sm text-gray-600 dark:text-gray-400">{type}</p>
 

@@ -12,7 +12,7 @@ interface DateTimePeriodPickerProps {
 }
 
 const DateTimePeriodPicker: React.FC<DateTimePeriodPickerProps> = ({ onChange }) => {
-    const [startDateTime, setStartDateTime] = useState<Date | null>(null);
+    const [startDateTime, setStartDateTime] = useState<Date | null>(new Date());
     const [period, setPeriod] = useState(60);
     const [roomFilter, setRoomFilter] = useState<roomFilter | null>(null);
 
