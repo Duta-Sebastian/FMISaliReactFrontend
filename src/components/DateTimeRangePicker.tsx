@@ -50,8 +50,8 @@ const DateTimePeriodPicker: React.FC<DateTimePeriodPickerProps> = ({ onChange })
                 />
             </div>
 
-            <div className="flex items-center gap-4">
-                <div>
+            <div className="flex items-center justify-between gap-4 w-full">
+                <div className="flex-1">
                     <label className="block text-sm font-medium mb-1">Select Period</label>
                     <select
                         value={period}
@@ -65,7 +65,7 @@ const DateTimePeriodPicker: React.FC<DateTimePeriodPickerProps> = ({ onChange })
                     </select>
                 </div>
 
-                <div className="flex justify-center flex-1">
+                <div className="flex items-center justify-end">
                     <FilterMenu onFilterChange={setRoomFilter} />
                 </div>
             </div>

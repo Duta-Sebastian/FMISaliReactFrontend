@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import ThemeSwitch from "./ThemeSwitch";
-import SideBarAPP from "@/components/common/SideBarA";
+import SideBarAPP from "@/components/SideBarA";
 import {useRef, useState} from "react";
 import useOutsideClick from "@/hooks/useOutsideClick";
 

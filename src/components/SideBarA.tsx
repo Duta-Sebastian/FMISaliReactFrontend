@@ -18,7 +18,7 @@ export default function SideBarAPP({ setIsOpenAction }: SideBarProps) {
       <Sidebar aria-label="Meniu principal" className="bg-gray-200 dark:bg-gray-800">
         <Sidebar.Items>
           <Sidebar.ItemGroup>
-            <Link href="/" passHref legacyBehavior>
+            <Link href="/public" passHref legacyBehavior>
               <Sidebar.Item
                   as="div"
                   className="text-lg hover:bg-gray-400 dark:hover:bg-gray-700"
