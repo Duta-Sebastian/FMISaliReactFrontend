@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Document, Page } from 'react-pdf';
 import { useFetchPDF } from '@/hooks/useFetchPDF';
 import usePdfTitles from '@/hooks/useTitlesPDF';
@@ -18,8 +18,7 @@ interface PdfProps {
 export default function PdfViewer({ fileId, getTitle }: PdfProps) {
     const [numPages, setNumPages] = useState<number | null>(null);
     const [pageNumber, setPageNumber] = useState<number>(1);
-    const [pageWidth, ] = useState<number>(900);
-    const [pageHeight, ] = useState<number>(500);
+    const [pageWidth, setPageWidth] = useState<number>(900);
     const [isTitlesReady, setIsTitlesReady] = useState(false);
     const pdfUrl = useFetchPDF(fileId);
     const titles = usePdfTitles(pdfUrl);
@@ -43,7 +42,7 @@ export default function PdfViewer({ fileId, getTitle }: PdfProps) {
 
     const prevPage = useCallback(() => {
         setPageNumber((prevPage) => (prevPage === 1 ? (numPages || 1) : prevPage - 1));
-    },[numPages]);
+    }, [numPages]);
 
     const nextPage = useCallback(() => {
         setPageNumber((prevPage) => (prevPage === (numPages || 1) ? 1 : prevPage + 1));
@@ -76,16 +75,38 @@ export default function PdfViewer({ fileId, getTitle }: PdfProps) {
         }
     }, [titles]);
 
+    useEffect(() => {
+        const updateDimensions = () => {
+            const width = window.innerWidth;
+
+            if (width < 640) { // Mobile
+                setPageWidth(width * 0.95); // 95% of screen width
+            } else if (width < 1024) { // Tablet
+                setPageWidth(width * 0.8); // 80% of screen width
+            } else { // Desktop
+                setPageWidth(Math.min(width * 0.7, 800)); // 70% of screen width, max 900px
+            }
+        };
+
+        updateDimensions();
+        window.addEventListener('resize', updateDimensions);
+
+        return () => {
+            window.removeEventListener('resize', updateDimensions);
+        };
+    }, []);
+
     return (
         <div
             {...swipeHandlers}
-            className="flex flex-col justify-center items-center h-full w-full bg-background-light dark:bg-background-dark p-4 overflow-hidden"
+            className="flex flex-col justify-center items-center
+             bg-background-light dark:bg-background-dark"
             ref={containerRef}
         >
             {isTitlesReady ? (
                 <>
                     {getTitle && titles.size > 0 && (
-                        <div className="w-full mb-4 z-10">
+                        <div className="z-10">
                             <AutocompleteSelect
                                 key={fileId}
                                 options={Array.from(titles.entries()).map(([key, value]) => ({
@@ -97,43 +118,44 @@ export default function PdfViewer({ fileId, getTitle }: PdfProps) {
                         </div>
                     )}
 
-                    <div className="w-full flex justify-center items-center">
-                        <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess}>
-                            {numPages ? (
-                                <Page
-                                    pageNumber={pageNumber}
-                                    width={pageWidth}
-                                    height={pageHeight}
-                                    renderAnnotationLayer={true}
-                                    renderTextLayer={true}
-                                />
-                            ) : (
-                                <div className="flex justify-center items-center text-lg text-gray-600">
-                                    Loading PDF...
-                                </div>
-                            )}
-                        </Document>
-                    </div>
+                    <div className="flex flex-col justify-center items-center">
+                        <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-auto">
+                            <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess}>
+                                {numPages ? (
+                                    <Page
+                                        pageNumber={pageNumber}
+                                        width={pageWidth}
+                                        renderAnnotationLayer={true}
+                                        renderTextLayer={true}
+                                    />
+                                ) : (
+                                    <div className="flex justify-center items-center text-lg text-gray-600 p-8">
+                                        Loading PDF...
+                                    </div>
+                                )}
+                            </Document>
+                        </div>
 
-                    <div className="flex justify-center mt-4 space-x-4">
-                        <button
-                            onClick={prevPage}
-                            className="p-2 bg-primary text-button-text rounded-lg border border-button-border-color dark:bg-primary-dark dark:border-button-border-color dark:text-button-text hover:bg-primary-hover dark:hover:bg-primary-dark-hover"
-                        >
-                            Previous
-                        </button>
-                        <button
-                            onClick={nextPage}
-                            className="p-2 bg-primary text-button-text rounded-lg border border-button-border-color dark:bg-primary-dark dark:border-button-border-color dark:text-button-text hover:bg-primary-hover dark:hover:bg-primary-dark-hover"
-                        >
-                            Next
-                        </button>
-                    </div>
+                        <div className="flex justify-center mt-4 space-x-4">
+                            <button
+                                onClick={prevPage}
+                                className="p-2 bg-primary text-button-text rounded-lg border border-button-border-color dark:bg-primary-dark dark:border-button-border-color dark:text-button-text hover:bg-primary-hover dark:hover:bg-primary-dark-hover hidden sm:block"
+                            >
+                                Previous
+                            </button>
+                            <button
+                                onClick={nextPage}
+                                className="p-2 bg-primary text-button-text rounded-lg border border-button-border-color dark:bg-primary-dark dark:border-button-border-color dark:text-button-text hover:bg-primary-hover dark:hover:bg-primary-dark-hover hidden sm:block"
+                            >
+                                Next
+                            </button>
+                        </div>
 
-                    <div className="flex justify-center items-center mt-4">
-                        <p className="text-text-light dark:text-text-dark text-sm sm:text-lg font-medium">
-                            Page {pageNumber} of {numPages}
-                        </p>
+                        <div className="flex justify-center items-center mt-4">
+                            <p className="text-text-light dark:text-text-dark text-sm sm:text-lg font-medium">
+                                Page {pageNumber} of {numPages}
+                            </p>
+                        </div>
                     </div>
                 </>
             ) : (

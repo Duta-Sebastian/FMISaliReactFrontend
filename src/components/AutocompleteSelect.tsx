@@ -12,8 +12,7 @@ const AutocompleteSelect: React.FC<AutocompleteSelectProps> = ({ options, onChan
     const [isReady, setIsReady] = useState<boolean>(false);
 
     const handleInputChange = (newValue: string) => {
-        if (newValue === inputValue)
-            return;
+        if (newValue === inputValue) return;
         setInputValue(newValue);
         onChange(newValue);
     };
@@ -25,23 +24,39 @@ const AutocompleteSelect: React.FC<AutocompleteSelectProps> = ({ options, onChan
     useEffect(() => {
         setIsReady(false);
 
-        const tempDiv = document.createElement('div');
-        tempDiv.style.visibility = 'hidden';
-        tempDiv.style.position = 'absolute';
-        tempDiv.style.whiteSpace = 'nowrap';
-        tempDiv.style.fontStyle = '16px';
-        document.body.appendChild(tempDiv);
+        const calculateWidth = () => {
+            const tempDiv = document.createElement('div');
+            tempDiv.style.visibility = 'hidden';
+            tempDiv.style.position = 'absolute';
+            tempDiv.style.whiteSpace = 'nowrap';
+            tempDiv.style.fontSize = '16px';
+            document.body.appendChild(tempDiv);
 
-        let maxWidth = 0;
-        options.forEach((options) => {
-            tempDiv.textContent = options.label;
-            maxWidth = Math.max(maxWidth, tempDiv.offsetWidth);
-        })
-        document.body.removeChild(tempDiv);
+            let maxWidth = 0;
+            options.forEach((option) => {
+                tempDiv.textContent = option.label;
+                maxWidth = Math.max(maxWidth, tempDiv.offsetWidth);
+            });
+            document.body.removeChild(tempDiv);
 
-        setWidth(Math.min(Math.max(maxWidth + 50, 300), 600));
+            const screenWidth = window.innerWidth;
+            if (screenWidth < 640) {
+                setWidth(Math.min(maxWidth + 50, screenWidth * 0.9));
+            } else if (screenWidth < 1024) {
+                setWidth(Math.min(maxWidth + 50, 600));
+            } else {
+                setWidth(Math.min(maxWidth + 50, 800));
+            }
+        };
+
+        calculateWidth();
+        window.addEventListener('resize', calculateWidth);
 
         setIsReady(true);
+
+        return () => {
+            window.removeEventListener('resize', calculateWidth);
+        };
     }, [options]);
 
     return (
@@ -60,21 +75,21 @@ const AutocompleteSelect: React.FC<AutocompleteSelectProps> = ({ options, onChan
                         className="react-select-container"
                         classNamePrefix="react-select"
                         styles={{
-                            "control": (base) => ({
+                            control: (base) => ({
                                 ...base,
                                 width: `${width}px`,
                                 padding: '4px 12px',
                                 borderRadius: '6px',
                                 borderColor: '#D1D5DB',
                                 boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
-                                backgroundColor: 'dark:var(--select-bg-light)',
+                                backgroundColor: 'var(--select-bg-light)',
                                 color: 'var(--select-text-light)',
                                 justifyContent: 'center',
                                 '&:hover': {
                                     borderColor: '#3B82F6',
                                 },
                             }),
-                            "option": (base, state) => ({
+                            option: (base, state) => ({
                                 ...base,
                                 backgroundColor: state.isSelected
                                     ? '#3B82F6'
@@ -89,22 +104,23 @@ const AutocompleteSelect: React.FC<AutocompleteSelectProps> = ({ options, onChan
                                 },
                                 justifyContent: 'center',
                             }),
-                            "placeholder": (base) => ({
+                            placeholder: (base) => ({
                                 ...base,
                                 color: '#9CA3AF',
                                 fontStyle: 'italic',
                                 textAlign: 'center',
                             }),
-                            "valueContainer": (base) => ({
+                            valueContainer: (base) => ({
                                 ...base,
                                 justifyContent: 'center',
                             }),
-                            "singleValue": (base) => ({
+                            singleValue: (base) => ({
                                 ...base,
-                                color: 'white',
-                            })
+                                color: 'var(--select-text-light)',
+                            }),
                         }}
-                    />) : null}
+                    />
+                ) : null}
             </div>
         </div>
     );
