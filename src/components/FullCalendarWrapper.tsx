@@ -44,6 +44,7 @@ const FullCalendarWrapper: React.FC<FullCalendarWrapperProps> = ({ events }) => 
             eventTextColor="white"
             eventOverlap={false}
             allDaySlot={false}
+            expandRows={true}
             firstDay={1}
             dayHeaderClassNames="dark:text-white"
         />
