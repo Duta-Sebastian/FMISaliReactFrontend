@@ -1,9 +1,11 @@
 "use client";
 
 import { Sidebar } from "flowbite-react";
-import { HiArrowSmRight, HiHome, HiPresentationChartBar, HiTicket } from "react-icons/hi";
+import {HiArrowSmRight, HiHome, HiPresentationChartBar, HiTicket} from "react-icons/hi";
 import { HiCalendarDays } from "react-icons/hi2";
 import Link from "next/link";
+import {AuthenticatedTemplate, UnauthenticatedTemplate, useMsal} from "@azure/msal-react";
+import {loginRequest} from "@/auth/authConfig";
 
 interface SideBarProps {
   setIsOpenAction: (isOpen: boolean) => void;
@@ -14,11 +16,31 @@ export default function SideBarAPP({ setIsOpenAction }: SideBarProps) {
     setIsOpenAction(false);
   };
 
+  const { instance, accounts } = useMsal();
+  const activeAccount = instance.getActiveAccount();
+
+  const handleLoginRedirect = () => {
+    instance
+        .loginPopup({
+          ...loginRequest,
+          prompt: 'create',
+        })
+        .catch((error) => console.log(error));
+  };
+
+  const handleLogoutRedirect = () => {
+    instance.logoutPopup({
+      postLogoutRedirectUri: '/',
+      account: accounts[0],
+    });
+    window.location.reload();
+  }
+
   return (
       <Sidebar aria-label="Meniu principal" className="bg-gray-200 dark:bg-gray-800">
         <Sidebar.Items>
           <Sidebar.ItemGroup>
-            <Link href="/public" passHref legacyBehavior>
+            <Link href="/" passHref legacyBehavior>
               <Sidebar.Item
                   as="div"
                   className="text-lg hover:bg-gray-400 dark:hover:bg-gray-700"
@@ -96,18 +118,34 @@ export default function SideBarAPP({ setIsOpenAction }: SideBarProps) {
               </Sidebar.Item>
             </Link>
 
-            <Link href="/autentificare" passHref legacyBehavior>
+            <div>
               <Sidebar.Item
                   as="div"
                   className="text-lg hover:bg-gray-400 dark:hover:bg-gray-700"
                   onClick={handleLinkClick}
               >
-                <div className="flex items-center justify-center w-full px-4 py-2 cursor-pointer">
-                  <HiArrowSmRight className="mr-2" />
-                  Sign In
-                </div>
+                <AuthenticatedTemplate>
+                  {activeAccount ? (
+                      <div
+                          className="flex items-center justify-center w-full px-4 py-2 cursor-pointer"
+                          onClick={handleLogoutRedirect}
+                      >
+                        <HiArrowSmRight className="mr-2" />
+                        Log Out
+                      </div>
+                  ) : null}
+                </AuthenticatedTemplate>
+                <UnauthenticatedTemplate>
+                  <div
+                      className="flex items-center justify-center w-full px-4 py-2 cursor-pointer"
+                      onClick={handleLoginRedirect}
+                  >
+                    <HiArrowSmRight className="mr-2" />
+                    Sign In
+                  </div>
+                </UnauthenticatedTemplate>
               </Sidebar.Item>
-            </Link>
+            </div>
           </Sidebar.ItemGroup>
         </Sidebar.Items>
       </Sidebar>

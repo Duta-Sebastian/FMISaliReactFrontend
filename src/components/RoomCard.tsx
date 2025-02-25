@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { RoomCardProp } from "@/types/roomCardProp";
+import {AuthenticatedTemplate} from "@azure/msal-react";
 
 const RoomCard: React.FC<RoomCardProp> = ({ name, type, capacity, facilities }) => {
     const [showButtons, setShowButtons] = useState(false);
@@ -38,9 +39,11 @@ const RoomCard: React.FC<RoomCardProp> = ({ name, type, capacity, facilities }) 
                 <button className="bg-blue-500 dark:bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 dark:hover:bg-blue-700 transition-all">
                     View
                 </button>
-                <button className="bg-green-500 dark:bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600 dark:hover:bg-green-700 transition-all">
-                    Book
-                </button>
+                <AuthenticatedTemplate>
+                    <button className="bg-green-500 dark:bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600 dark:hover:bg-green-700 transition-all">
+                        Book
+                    </button>
+                </AuthenticatedTemplate>
             </div>
         </div>
     );
