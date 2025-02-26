@@ -1,12 +1,14 @@
 "use client";
 import { useMsal } from "@azure/msal-react";
 import { useState } from "react";
+import {useUser} from "@/components/UserContext";
 
 export default function Home() {
     const { instance, accounts } = useMsal();
     const [userData, ] = useState(null);
     const [accessToken, setAccessToken] = useState<string | null>(null);
     const [, setTru] = useState<string>();
+    const {user} = useUser();
 
     const getUserData = async () => {
         if (accounts.length === 0) return;
@@ -43,6 +45,7 @@ export default function Home() {
                     </pre>
                 </>
             )}
+            <p>{user?.displayName}</p>
         </div>
     );
 }

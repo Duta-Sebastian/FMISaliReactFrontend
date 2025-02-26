@@ -4,37 +4,18 @@ import { Sidebar } from "flowbite-react";
 import {HiArrowSmRight, HiHome, HiPresentationChartBar, HiTicket} from "react-icons/hi";
 import { HiCalendarDays } from "react-icons/hi2";
 import Link from "next/link";
-import {AuthenticatedTemplate, UnauthenticatedTemplate, useMsal} from "@azure/msal-react";
-import {loginRequest} from "@/auth/authConfig";
+import {AuthenticatedTemplate, UnauthenticatedTemplate} from "@azure/msal-react";
+import {useUser} from "@/components/UserContext";
 
 interface SideBarProps {
   setIsOpenAction: (isOpen: boolean) => void;
 }
 
 export default function SideBarAPP({ setIsOpenAction }: SideBarProps) {
+  const { user, login, logout } = useUser();
   const handleLinkClick = () => {
     setIsOpenAction(false);
   };
-
-  const { instance, accounts } = useMsal();
-  const activeAccount = instance.getActiveAccount();
-
-  const handleLoginRedirect = () => {
-    instance
-        .loginPopup({
-          ...loginRequest,
-          prompt: 'create',
-        })
-        .catch((error) => console.log(error));
-  };
-
-  const handleLogoutRedirect = () => {
-    instance.logoutPopup({
-      postLogoutRedirectUri: '/',
-      account: accounts[0],
-    });
-    window.location.reload();
-  }
 
   return (
       <Sidebar aria-label="Meniu principal" className="bg-gray-200 dark:bg-gray-800">
@@ -125,10 +106,10 @@ export default function SideBarAPP({ setIsOpenAction }: SideBarProps) {
                   onClick={handleLinkClick}
               >
                 <AuthenticatedTemplate>
-                  {activeAccount ? (
+                  {user ? (
                       <div
                           className="flex items-center justify-center w-full px-4 py-2 cursor-pointer"
-                          onClick={handleLogoutRedirect}
+                          onClick={logout}
                       >
                         <HiArrowSmRight className="mr-2" />
                         Log Out
@@ -138,7 +119,7 @@ export default function SideBarAPP({ setIsOpenAction }: SideBarProps) {
                 <UnauthenticatedTemplate>
                   <div
                       className="flex items-center justify-center w-full px-4 py-2 cursor-pointer"
-                      onClick={handleLoginRedirect}
+                      onClick={login}
                   >
                     <HiArrowSmRight className="mr-2" />
                     Sign In

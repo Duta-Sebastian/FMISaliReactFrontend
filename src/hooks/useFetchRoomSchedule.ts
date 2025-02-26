@@ -15,7 +15,7 @@ const useFetchRoomSchedule = (roomName : string | null) => {
                 }
                 const data = await response.json();
                 if (data.length === 0) {
-                    throw new Error("Failed to fetch rooms schedule");
+                    console.log("No schedule events found");
                 }
                 const events: CalendarEvent[] = data.map((event: CalendarEvent) => ({
                     title: event.title,
